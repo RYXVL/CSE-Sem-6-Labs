@@ -8,6 +8,7 @@ int main(int argc, char* argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if(rank == 0) {
+        printf("Rank - %d\n", rank);
         int start0 = start;
         int end0 = end/2;
         int flag;
@@ -22,9 +23,9 @@ int main(int argc, char* argv[]) {
             if(i==1) continue;
             else if(flag==1) printf("%d ", i);
         }
-        printf("\n");
     }
     else if (rank == 1) {
+        printf("\nRank - %d\n", rank);
         int start1 = end/2+1;
         int end1 = end;
         int flag;
@@ -40,7 +41,6 @@ int main(int argc, char* argv[]) {
             else if(flag==1) printf("%d ", i);
         }
     }
-    printf("\n");
     MPI_Finalize();
     return 0;
 }
