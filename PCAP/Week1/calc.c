@@ -8,13 +8,13 @@ int main(int argc, char* argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if(rank == 0)
-        printf("Addition - %d.\n", a + b);
+        printf("Addition - %d | rank - %d.\n", a + b, rank);
     else if (rank == 1)
-        printf("Subtraction - %d.\n", a - b);
+        printf("Subtraction - %d | rank - %d.\n", a - b, rank);
     else if (rank == 2)
-        printf("Multiplication - %d.\n", a * b);
+        printf("Multiplication - %d | rank - %d.\n", a * b, rank);
     else if (rank == 3)
-        printf("Division - %d.\n", a / b);
+        printf("Division - %d | rank - %d.\n", a / b, rank);
     MPI_Finalize();
     return 0;
 }
