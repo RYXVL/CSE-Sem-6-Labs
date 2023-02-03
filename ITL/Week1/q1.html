@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample</title>
+    <style>
+        table, td {
+            border: 1px solid black;
+        }
+    </style>
+
+    <script type="text/javascript" src="jquery-3.6.3.js"></script>
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            $("#btnSubmit").click(function () {
+                $("table").attr("style", "margin-left: 0px;");
+                $("img").attr("style", "margin-left: 0px;");
+            });
+
+        });
+    </script>
+</head>
+<body style="font-family:Arial">
+
+    <table id="sampletable" style="border: 1px solid black; margin-left:500px;">
+        <tr>
+            <td style="background-color: red">Alpha1</td>
+            <td style="background-color: blue">Alpha2</td>
+            <td style="background-color: green">Alpha3</td>
+        </tr>
+        <tr>
+            <td style="background-color: pink">Beta1</td>
+            <td style="background-color: magenta">Beta2</td>
+            <td style="background-color: lawngreen">Beta3</td>
+        <tr>
+            <td style="background-color: purple">Gamma1</td>
+            <td style="background-color: violet">Gamma2</td>
+            <td style="background-color: indigo">Gamma3</td>
+        </tr>
+    </table>
+    <img id="sampleimg" src="./img2.jpg" height="400" width="400" alt="Sample Image" style="margin-left: 500px">
+    <br />
+    <input id="btnSubmit" type="submit" value="Submit">
+</body>
+</html>
+
+<!--
+<div  id="newdiv" align="right" style="background-color: pink">
+</div>
+-->
