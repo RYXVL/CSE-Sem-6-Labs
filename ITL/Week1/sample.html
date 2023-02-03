@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<!--<html>
+    <head>
+        <title>The jQuery Example</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function() {
+                $("div").click(function() {alert("Hello, world!");});
+            });
+        </script>
+    </head>
+    <body>
+        <div id="mydiv">
+            Click on this to see a dialogue box.
+        </div>
+    </body>
+</html>-->
+<!--<html>
+<body>
+    <head>
+        <title>Sample</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () {
+                $("p").css("background-color", "yellow");
+                $("#myid").css("background-color", "red");
+            });
+        </script>
+    </head>
+    <body>
+        <div>
+            <p class="myclass">This is a paragraph.</p>
+            <p id="myid">This is second paragraph.</p>
+            <p>This is third paragraph.</p>
+        </div>
+    </body>
+</html>-->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>-->
+<!--<html>
+    <head>
+        <title>Sample</title>
+        <script type="text/javascript" src="jquery-3.6.3.js"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () {
+                var title = $("p").attr("title");
+                $("#divid").text(title);
+                $("#myimg").attr("src", "./img1.jfif");
+            });
+        </script>
+    </head>
+    <body>
+        <div>
+            <p title="Bold and Brave">This is first paragraph.</p>
+            <p id="myid">This is second paragraph.</p>
+            <div id="divid"></div>
+            <img id="myimg" alt="Sample image" />
+        </div>
+    </body>
+</html>-->
+<!--<html>
+<head>
+    <title>Sample</title>
+    <script type="text/javascript" src="jquery-3.6.3.js"></script>
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            $("div").click(function () {
+                $(this).replaceWith("<h1>JQuery is Great</h1>");
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <p title="Bold and Brave">This is first paragraph.</p>
+        <p id="myid">This is second paragraph.</p>
+        <div id="divid">HELLO</div>
+        <img id="myimg" alt="Sample image" />
+    </div>
+</body>
+</html>-->
+<!--<html>
+    <head>
+        <title>Sample</title>
+        <script type="text/javascript" src="jquery-3.6.3.js"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () {
+                $('#button').click(function () {
+                    $(this).val("Stop that!");
+                }); // end click
+            });
+        </script>
+    </head>
+    <body>
+        <div id="mydiv">
+            Click on this to see a dialogue box.
+            <input type="button" id="button" value="sample">
+        </div>
+    </body>
+</html>-->
+<!--<html>
+    <head>
+        <title>Sample</title>
+        <script type="text/javascript" src="jquery-3.6.3.js"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () {
+                $('div').hover(
+                    function () {
+                        $(this).css({ "background-color": "red" });
+                    },
+                    function () {
+                        $(this).css({ "background-color": "blue" });
+                     }
+                );
+            });
+        </script>
+    </head>
+    <body>
+        <div id="mydiv">
+            Click on this to see a dialogue box.
+            <input type="button" id="button" value="sample">
+        </div>
+</body>
+</html>-->
+<!--<html>
+<head>
+    <title>Sample</title>
+    <script type="text/javascript" src="jquery-3.6.3.js"></script>
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            $('div').bind('click', function () {
+                alert("BOOM!");
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="mydiv">
+        Click on this to see a dialogue box.
+        <input type="button" id="button" value="sample">
+    </div>
+</body>
+</html>-->
+<!--<html>
+    <head>
+        <title>Sample</title>
+        <script type="text/javascript" src="jquery-3.6.3.js"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () {
+                $('#btnSubmit').click(function () {
+                    var result = $('input[type="radio"]:checked');
+                    if (result.length > 0) {
+                        $('#divResult').html(result.val() + " is checked");
+                    }
+                    else {
+                        $('#divResult').html("No radio button checked");
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        style="font-family:Arial">
+        Gender :
+        <input type="radio" name="gender" value="Male">Male
+        <input type="radio" name="gender" value="Female">Female
+        <input id="btnSubmit" type="submit" value="submit" />
+        <div id="divResult"></div>
+    </body>
+</html>-->
+<!--<html>
+    <head>
+        <title></title>
+        <script type="text/javascript" src="jquery-3.6.3.js"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () {
+                $('#btnSubmit').click(function () {
+                    var result = $('input[type="checkbox"]:checked');
+                    if (result.length > 0) {
+                        var resultString = result.length + " checkboxe(s) checked<br/>";
+                        result.each(function () {
+                            resultString += $(this).val() + "<br/>";
+                        });
+                        $('#divResult').html(resultString);
+                    }
+                    else {
+                        $('#divResult').html("No checkbox checked");
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body style="font-family:Arial">
+        Skills :
+        <input type="checkbox" name="skills" value="JavaScript" />JavaScript
+        <input type="checkbox" name="skills" value="jQuery" />jQuery
+        <input type="checkbox" name="skills" value="C#" />C#
+        <input type="checkbox" name="skills" value="VB" />VB
+        <br /><br />
+        <input id="btnSubmit" type="submit" value="submit" />
+        <br /><br />
+        <div id="divResult"></div>
+    </body>
+</html>-->
+<!--<html>
+    <head>
+        <title></title>
+        <script type="text/javascript" src="jquery-3.6.3.js"></script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () {
+                $("btnSubmit").click(function () { $("#divResult2").animate({ left: '250px' }); });
+            });
+        </script>
+    </head>
+    <body style="font-family:Arial">
+        Skills :
+        <input type="checkbox" name="skills" value="JavaScript" />JavaScript
+        <input type="checkbox" name="skills" value="jQuery" />jQuery
+        <input type="checkbox" name="skills" value="C#" />C#
+        <input type="checkbox" name="skills" value="VB" />VB
+        <br /><br />
+        <input id="btnSubmit" type="submit" value="submit" />
+        <br /><br />
+        <div id="divResult1">SAMPLE1</div>
+        <div id="divResult2">SAMPLE2</div>
+    </body>
+</html>-->
