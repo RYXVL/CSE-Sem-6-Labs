@@ -1,0 +1,347 @@
+// lab8addq1
+// given a string consisting of N words
+// reverse each word in parallel
+
+#include <stdio.h>
+#include <string.h>
+#include <cude_runtime.h>
+
+__global__ void reverse(char *word_d, int len)
+{
+    int tid = threadIdx.x;
+    int end = tid;
+    if(tid == 0 || word_d[tid-1] == ' ') {
+    	while(word_d[end+1] != ' ' && end != len-1)
+            end++;
+        for(int i=tid; i<=(end+tid)/2; i++) {
+            char temp = word_d[end - i + tid];
+            word_d[end - i + tid] = word_d[i];
+            word_d[i] = temp;
+        }
+    }
+}
+
+int main()
+{
+    char sentence_h[100];
+    char *sentence_d;
+
+    printf("Enter a sentence: ");
+    scanf("%[^\n]s", sentence_h);
+    int len = strlen(sentence_h);
+
+    cudaMalloc((void **)&sentence_d, sizeof(char) * len);
+    cudaMemcpy(sentence_d, sentence_h, sizeof(char) * len, cudaMemcpyHostToDevice);
+    reverse<<<1, len>>>(sentence_d, len);
+    cudaMemcpy(sentence_h, sentence_d, sizeof(char) * len, cudaMemcpyDeviceToHost);
+    printf("The reversed sentence is: %s\n", sentence_h);
+    return 0;
+}
+
+
+
+// lab8addq2
+// given a WORD and an integer N
+// produce an output string that concatenates N occurences WORD in parallel
+
+#include<stdio.h>
+#include<string.h>
+#include <cude_runtime.h>
+
+__global__ void ntimes(char *word_d,char* ans_d,int len){
+	int tid = threadIdx.x;
+	int index = tid * len;
+	for(int i = 0;i<len;i++){
+		ans_d[index + i] = word_d[i];
+	}
+}
+
+int main(){
+	char word[10],*ans_h;
+	char *word_d,*ans_d;
+	 int n;
+	 printf("enter number of times:");
+	 scanf("%d",&n);
+	
+	printf("enter the word:");
+	scanf("%s",word);
+	int len = strlen(word);
+	ans_h = (char *)malloc(sizeof(char)*len*n);
+	cudaMalloc((void**)&ans_d, sizeof(char)*len * n);
+	cudaMalloc((void **)&word_d,sizeof(char)*len);
+	
+	cudaMemcpy(word_d,word,sizeof(char)*len,cudaMemcpyHostToDevice);
+	
+	
+	ntimes<<<1,len>>>(word_d,ans_d,len);
+	cudaMemcpy(ans_h,ans_d,sizeof(char)*len*n,cudaMemcpyDeviceToHost);
+	printf("the resultant pattern is:%s\n",ans_h);
+
+}
+
+
+
+// lab8addq3
+// given a WORD
+// produce a NEWWORD consiting of letters of WORD where each letter occurs its INDEX+1 times
+
+#include <cude_runtime.h>
+#include<stdio.h>
+#include<string.h>
+
+__global__ void repeat(char* word_d, char* ans_d, int len) {
+    	int tid= threadIdx.x;
+	for(int i=0; i <= tid; i++)
+		ans_d[(tid*(tid+1))/2+i] = word_d[tid];
+}
+
+int main(){
+	char word_h[10];
+	char *word_d,*ans_d,*ans_h;
+	printf("enter the word:");
+	scanf("%s",word_h);
+	int len = sizeof(word_h);
+	ans_h = (char*)malloc(sizeof(char)*((len * (len + 1))/2));
+	cudaMalloc((void **)&word_d,sizeof(char)*len);
+	cudaMalloc((void **)&ans_d,sizeof(char)*((len * (len + 1))/2));
+	cudaMemcpy(word_d,word_h,sizeof(char)*len,cudaMemcpyHostToDevice);
+	repeat<<<1,len>>>(word_d,ans_d,len);
+	cudaMemcpy(ans_h,ans_d,sizeof(char)*((len * (len + 1))/2),cudaMemcpyDeviceToHost);
+	printf("the resultant pattern is:%s and size is %d\n",ans_h,strlen(ans_h));
+}
+
+
+
+// lab9addq1
+// given a M*N integer matrix
+// produce a M*N integer matrix where even numbered elements are replaced by their row sum and odd elements are replaced by their colummn sum
+
+#include<stdio.h>
+#include <cude_runtime.h>
+
+__global__ void eomat(int *d_mat1,int *d_mat2,int m,int n){
+	int tid = blockIdx.x;
+	int sum = 0;
+	if(d_mat1[tid] % 2 == 0){
+		int row = tid/n;
+		for(int i = 0;i<n;i++){
+			sum += d_mat1[row*n + i];
+		}
+		d_mat2[tid] = sum;
+	}
+	else{
+		int col = tid%n;
+		for(int i = 0;i<m;i++){
+			sum += d_mat1[i*n + col];
+		}
+		d_mat2[tid] = sum;
+	}
+}
+int main(){
+	int m,n;
+	printf("enter the row and col:");
+	scanf("%d%d",&m,&n);
+	int *mat1,*mat2;
+	int *d_mat1,*d_mat2;
+	
+	mat1 = (int *)malloc(m*n*sizeof(int));
+	mat2 = (int *)malloc(m*n*sizeof(int));
+	
+	cudaMalloc((void **)&d_mat1,sizeof(int)*m*n);
+	cudaMalloc((void **)&d_mat2,sizeof(int)*m*n);
+	
+	printf("enter matrix A:\n");
+	for(int i = 0;i<m*n;i++){
+		scanf("%d",&mat1[i]);
+	}
+	
+	cudaMemcpy(d_mat1,mat1,sizeof(int)*m*n,cudaMemcpyHostToDevice);
+	cudaMemcpy(d_mat2,mat2,sizeof(int)*m*n,cudaMemcpyHostToDevice);
+	
+	eomat<<<m*n,1>>>(d_mat1,d_mat2,m,n);
+	
+	cudaMemcpy(mat2,d_mat2,m*n*sizeof(int),cudaMemcpyDeviceToHost);
+	for(int i=0; i<m*n; i++) {
+		if(i%n == 0)
+			printf("\n");
+		printf("%d ", mat2[i]);
+	}
+}
+
+
+
+// lab9addq2
+// given a M*N matrix
+// replace all principle diagonal elements with 0, elements above the diagonal by their factorial and elements below the diagonal with the sum of their digits
+
+#include<stdio.h>
+#include <cude_runtime.h>
+
+__global__ void pdmat(int *d_mat1, int m){
+	int tid = blockIdx.x;
+	int row = tid/m;
+	int col = tid%m;
+	if(col > row){
+		int fact = 1;
+		for(int i = 2; i <= d_mat1[tid]; i++)
+			fact *= i;
+		d_mat1[tid] = fact;
+	}
+	else if(col < row){
+		int sod = 0;
+		while(d_mat1[tid]) {
+			sod += d_mat1[tid]%10;
+			d_mat1[tid]/=10;
+		}
+		d_mat1[tid] = sod;
+	}
+	else {
+		d_mat1[tid] = 0;
+	}
+}
+int main(){
+	int m,n;
+	printf("enter the row and col:");
+	scanf("%d%d",&m,&n);
+	int *mat1,*mat2;
+	int *d_mat1,*d_mat2;
+	
+	mat1 = (int *)malloc(m*n*sizeof(int));
+	mat2 = (int *)malloc(m*n*sizeof(int));
+	
+	cudaMalloc((void **)&d_mat1,sizeof(int)*m*n);
+	//cudaMalloc((void **)&d_mat2,sizeof(int)*m*n);
+	
+	printf("enter matrix A:\n");
+	for(int i = 0;i<m*n;i++){
+		scanf("%d",&mat1[i]);
+	}
+	
+	cudaMemcpy(d_mat1,mat1,sizeof(int)*m*n,cudaMemcpyHostToDevice);
+	
+	pdmat<<<m*n,1>>>(d_mat1,m);
+	
+	cudaMemcpy(mat2,d_mat1,m*n*sizeof(int),cudaMemcpyDeviceToHost);
+	for(int i=0; i<m*n; i++) {
+		if(i%n == 0)
+			printf("\n");
+		printf("%d ", mat2[i]);
+	}
+}
+
+
+
+// lab10addq1
+// given a M*N matrix
+// produce a M*N matrix where each element is the sum of all elements of the respective row and col
+
+#include<stdio.h>
+#include <cude_runtime.h>
+
+__global__ void eomat(int *d_mat1,int *d_mat2,int m,int n){
+	int tid = blockIdx.x;
+	int sum1 = 0;
+	int sum2  = 0;
+	int result = 0;
+	int row = tid/n;
+	int col = tid%n;
+	for(int i = 0;i<n;i++){
+		sum1+=d_mat1[row*n+ i];
+	}
+	for(int i = 0;i<m;i++){
+		sum2+=d_mat1[i*n + col];
+	}
+	result = sum1 + sum2;
+	d_mat2[tid] = result;
+	
+}
+int main(){
+	int m,n;
+	printf("enter the row and col:");
+	scanf("%d%d",&m,&n);
+	int *mat1,*mat2;
+	int *d_mat1,*d_mat2;
+	
+	mat1 = (int *)malloc(m*n*sizeof(int));
+	mat2 = (int *)malloc(m*n*sizeof(int));
+	
+	cudaMalloc((void **)&d_mat1,sizeof(int)*m*n);
+	cudaMalloc((void **)&d_mat2,sizeof(int)*m*n);
+	
+	printf("enter matrix A:\n");
+	for(int i = 0;i<m*n;i++){
+		scanf("%d",&mat1[i]);
+	}
+	
+	cudaMemcpy(d_mat1,mat1,sizeof(int)*m*n,cudaMemcpyHostToDevice);
+	cudaMemcpy(d_mat2,mat2,sizeof(int)*m*n,cudaMemcpyHostToDevice);
+	
+	eomat<<<m*n,1>>>(d_mat1,d_mat2,m,n);
+	
+	cudaMemcpy(mat2,d_mat2,m*n*sizeof(int),cudaMemcpyDeviceToHost);
+	for(int i=0; i<m*n; i++) {
+		if(i%n == 0)
+			printf("\n");
+		printf("%d ", mat2[i]);
+	}
+}
+
+
+
+// lab10addq2
+// given a M*N char and integer matrix
+// produce and output string where each letter is repeated, corresponding integer number of times
+
+#include<stdio.h>
+#include<string.h>
+#include <cude_runtime.h>
+
+__global__ void patternmat(char *mat1, int *mat2, char *ans, int m, int n) {
+    int tid = blockIdx.x;
+    int currIdx = 0;
+
+    for(int i=0; i<tid; i++)
+        currIdx += mat2[i];
+    
+    for(int j=currIdx; j<currIdx+mat2[tid]; j++)
+        ans[j] = mat1[tid];
+}
+
+int main(){
+	int m,n;
+	printf("enter the row and col for char matrix:");
+	scanf("%d %d",&m,&n);
+	
+	char *mat1,*mat1_d,*ans,*ans_d;
+	int *mat2,*mat2_d;
+	
+	mat1 = (char*)malloc(sizeof(char)*m*n);
+	mat2 = (int*)malloc(sizeof(int)*m*n);
+	
+	printf("enter the char matrix:\n");
+	scanf("%s",mat1);
+	printf("enter the integer matrix:\n");
+	for(int i = 0;i<(m*n);i++){
+		scanf("%d",&mat2[i]);
+	}
+	
+	int sum = 0;
+	for(int i=0; i<m*n; i++)
+		sum += mat2[i];
+	
+	ans = (char*)malloc(sizeof(char)*sum);
+	
+	cudaMalloc((void**)&mat1_d,sizeof(char)*m*n);
+	cudaMalloc((void**)&mat2_d,sizeof(int)*m*n);
+	cudaMalloc((void**)&ans_d,sizeof(char)*sum);
+	
+	
+	cudaMemcpy(mat1_d,mat1,sizeof(char)*m*n,cudaMemcpyHostToDevice);
+	cudaMemcpy(mat2_d,mat2,sizeof(int)*m*n,cudaMemcpyHostToDevice);	
+	
+	patternmat<<<m*n,1>>>(mat1_d,mat2_d,ans_d,m,n);
+	cudaMemcpy(ans,ans_d,sizeof(char)*sum,cudaMemcpyDeviceToHost);
+	
+	printf("the string is: %s\n", ans);
+	return 0;
+}
