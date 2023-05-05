@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>FILTERED DATA</title>
+</head>
+<body>
+    {{header}}<br />
+    {% for dt in data %}
+        Book Name: {{dt.bookname}}<br></br>
+        Date of Issue: {{dt.issuedate}}<br />
+                                       <hr />
+    {% endfor %}
+    <form action="{% url 'index' %}" method="">
+        <button type="submit">Go Back</button>
+    </form>
+</body>
+</html>

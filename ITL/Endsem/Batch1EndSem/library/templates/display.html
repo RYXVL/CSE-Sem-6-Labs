@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>DISPLAY</title>
+</head>
+<body>
+    {% for data in bookdata %}
+        Bookname: {{data.bookname}}<br />
+        Authorname: {{data.authorname}}<br />
+        Publishername: {{data.publishername}}<br />
+        <hr />
+    {% endfor %}
+    {% for data in issuerdata %}
+        Issuername: {{data.issuername}}<br />
+        Bookname: {{data.bookname}}<br />
+        Issue Data: {{data.issuedate}}<br />
+        <hr />
+    {% endfor %}
+        <hr />
+        <form action="{% url 'index' %}" method="">
+            <button type="submit">Go Back</button>
+        </form>
+</body>
+</html>

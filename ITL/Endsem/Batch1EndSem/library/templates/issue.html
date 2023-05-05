@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>ISSUER ENTRY</title>
+</head>
+<body>
+    <form action="{% url 'issue' %}" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Submit</button>
+    </form>
+    <hr />
+    <form action="{% url 'index' %}" method="">
+        <button type="submit">Go Back</button>
+    </form>
+    <hr />
+    <form action="{% url 'filter' %}" method="POST">
+        {% csrf_token %}
+        {{filterform.as_p}}
+        <button type="submit">Filter</button>
+    </form>
+</body>
+</html>
